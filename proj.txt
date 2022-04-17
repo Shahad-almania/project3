@@ -1,0 +1,102 @@
+-- create database store name
+create database store; 
+
+-- create table countries name
+create table countries(
+code int primary key,
+name varchar(20),
+continent_name varchar(20));
+
+-- create table users name
+create table users(
+id int primary key,
+full_name varchar(20),
+email varchar(20),
+gender char(1),
+date_of_birth varchar(15),
+created_at datetime,
+country_code int,
+foreign key (country_code) references  countries (code));
+
+-- create table orders name
+create table orders(
+id int primary key,
+user_id int,
+status varchar(6),
+created_at datetime,
+foreign key (user_id) references users (id));
+
+-- create table products name
+create table products(
+id int primary key,
+name varchar(10),
+price int,
+status varchar(10),
+created_at datetime);
+
+-- create table order products name
+create table order_products(
+order_id int ,
+product_id int ,
+quantity int ,
+primary key (order_id,product_id ),
+foreign key (order_id) references orders (id),
+foreign key (product_id) references products (id));
+
+-- Add unique constraint to column " name "
+ alter table countries
+  modify column name varchar(20) unique;
+
+ -- Add not null constraint to column " continent_name ".
+alter table countries
+modify column continent_name varchar(20) not null;
+
+  -- Add unique constraint to column " email ".
+  alter table users
+  modify column email varchar(20) unique;
+  
+  -- Add check constraint to column " gender " between 'm' or 'f'.
+  alter table users 
+  modify column gender char(1) check (gender ="m" or gender ="f");
+  
+  -- Add check constraint to column " status " between 'start' or 'finish'.
+  alter table orders 
+  modify column status varchar(6) check (status ="start" or status ="finish");
+  
+  -- Add default value to column " quantity " value 0.
+  alter table order_products 
+  modify column quantity int default 0 ;
+  
+  -- Add default value to column " price " value 0.
+  alter table products
+  modify column price int default 0 ;
+  
+  -- Add not null constraint to column " name ".
+  alter table products
+  modify column name varchar(10) not null;
+  
+  -- Add check constraint to column " status " between 'valid' or 'expired'.
+  alter table products 
+  modify column status varchar(10) check (status ="valid" or status ="expired");
+  
+  --  Add default datetime to created_at column which take the timestap when the row is created
+  ALTER TABLE products
+  CHANGE created_at datetime  DATE NOT NULL DEFAULT CURRENT_TIMESTAMP;
+  
+ insert into countries 
+ values(1,"riydh", "Asia"),(2,"London", "Europe"),(3,"New York", "USA");
+ 
+  insert into users
+ values(1,"shahad", "s@test.com","f", "12-11-1234",12,1) , (2,"lana", "l@test.com","f", "11-11-2145",43,4);
+ 
+ insert into orders
+ values(1,2,"finish",14), (2,2,"start",15);
+ 
+ insert into products
+ values(1,"hamad",10,"expired",12), (2,"ahmad",11,"valid",13);
+ 
+ insert into order_products
+ values(1,2,0), (1,2,0);
+ 
+update countries set name ='riiydh' where id ='1' ;
+delete from products where id=1;
